@@ -1,0 +1,32 @@
+// check for ethernet controllers
+lspci | grep Ethernet
+
+// For me it is:
+01:00.0 Ethernet controller: Intel Corporation I350 Gigabit Network Connection (rev 01)
+01:00.1 Ethernet controller: Intel Corporation I350 Gigabit Network Connection (rev 01)
+19:00.0 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)
+19:00.1 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)
+
+
+// check dmgs logs
+dmesg | grep ixgbe
+
+// for me it is:
+[ ] ixgbe 0000:19:00.0: failed to load because an unsupported SFP+ or QSFP module type was detected.
+[ ] ixgbe 0000:19:00.0: Reload the driver after installing a supported module.
+[ ] ixgbe: probe of 0000:19:00.0 failed with error -95
+[ ] ixgbe 0000:19:00.1: failed to load because an unsupported SFP+ or QSFP module type was detected.
+[ ] ixgbe 0000:19:00.1: Reload the driver after installing a supported module.
+[ ] ixgbe: probe of 0000:19:00.1 failed with error -95
+
+// in case you get "failed to load because an unsupported SFP+ or QSFP module type was detected" do the following:
+
+echo "options ixgbe allow_unsupported_sfp=1" > /etc/modprobe.d/ixgbe.conf
+rmmod ixgbe
+modprobe ixgbe
+
+// use "ip a l" or "ifconfig" to check if your interface is there
+
+// reboot to check if the problem persist.
+
+/// more info: https://www.serveradminz.com/blog/unsupported-sfp-linux
