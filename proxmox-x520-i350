@@ -29,4 +29,17 @@ modprobe ixgbe
 
 // reboot to check if the problem persist.
 
+// in case the problem persist after reboot, edit grub file and add "ixgbe.allow_unsupported_sfp=1" as parameter to GRUB_CMDLINE_LINUX=””
+
+vim /etc/default/grub
+// example: GRUB_CMDLINE_LINUX=”ixgbe.allow_unsupported_sfp=1″
+
+
+// update grub config file
+grub-mkconfig -o /boot/grub/grub.cfg
+
+reboot
+
+
+
 /// more info: https://www.serveradminz.com/blog/unsupported-sfp-linux
